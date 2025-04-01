@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="china" class="com.example.laba3.China">
+        <constructor-arg index="0" value="1409670000 "/>
+        <constructor-arg index="1" value="Pekin"/>
+    </bean>
+
+    <bean id="russia" class="com.example.laba3.Russia">
+        <constructor-arg index="0" value="146119928"/>
+        <constructor-arg index="1" value="Moscow"/>
+    </bean>
+
+    <bean id="usa" class="com.example.laba3.USA">
+        <constructor-arg index="0" value="341814420"/>
+        <constructor-arg index="1" value="Washington"/>
+    </bean>
+
+    <bean id="chinaShow" class="com.example.laba3.CountryShow">
+        <constructor-arg ref="china"/>
+    </bean>
+
+    <bean id="russiaShow" class="com.example.laba3.CountryShow">
+        <constructor-arg ref="russia"/>
+    </bean>
+
+    <bean id="usaShow" class="com.example.laba3.CountryShow">
+        <constructor-arg ref="usa"/>
+    </bean>
+</beans>
