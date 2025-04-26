@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,7 +28,7 @@ class AppConfig {
     public Country china() {
         China china = new China();
         china.setPopulation(1409670000);
-        china.setCapital("Peking");
+        china.setCapital("Pekin");
         china.setGovernmentForm("Socialist Republic");
         return china;
     }
@@ -70,17 +69,6 @@ class CountryController {
         public String showCountries(Model model) {
             model.addAttribute("countries", countries);
             return "countries";
-    }
-
-    @GetMapping("/{name}")
-    public String showCountry(@PathVariable String name, Model model) {
-        for (Country country : countries) {
-            if (country.getName().equalsIgnoreCase(name)) {
-                model.addAttribute("country", country);
-                return "country";
-            }
-        }
-        return "country-not-found";
     }
 
     @GetMapping("/calculate")

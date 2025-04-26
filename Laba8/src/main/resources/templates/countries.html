@@ -5,14 +5,16 @@
     <title>Список стран</title>
 </head>
 <body>
+<h1>Информация о странах</h1>
 
-<h1>Все страны</h1>
-
-<ul>
-    <li th:each="country : ${countries}">
-        <a th:href="@{'/countries/' + ${country.name}}" th:text="${country.name}"></a>
-    </li>
-</ul>
+<div th:each="country : ${countries}">
+    <h2 th:text="${country.name}"></h2>
+    <p><strong>Столица:</strong> <span th:text="${country.capital}"></span></p>
+    <p><strong>Население:</strong> <span th:text="${country.population} + ' человек'"></span></p>
+    <p><strong>Форма правления:</strong> <span th:text="${country.governmentForm}"></span></p>
+    <hr/>
+</div>
 
 </body>
 </html>
+
