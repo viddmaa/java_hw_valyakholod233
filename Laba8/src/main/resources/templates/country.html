@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${country.name}">Страна</title>
+</head>
+<body>
+
+<h1 th:text="${country.name}"></h1>
+<p><strong>Столица:</strong> <span th:text="${country.capital}"></span></p>
+<p><strong>Население:</strong> <span th:text="${country.population}"></span> человек</p>
+<p><strong>Форма правления:</strong> <span th:text="${country.governmentForm}"></span></p>
+
+<a href="/countries">← Назад к списку стран</a>
+
+</body>
+</html>
