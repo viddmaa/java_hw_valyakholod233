@@ -4,6 +4,7 @@ public interface Country {
     long getPopulation();
     String getCapital();
     String getName();
+    String getGovernmentForm();
 }
 
 

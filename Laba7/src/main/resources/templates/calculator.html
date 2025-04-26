@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор</title>
+</head>
+<body>
+
+<h1>Результат вычисления</h1>
+
+<div th:if="${error}">
+    <p th:text="${error}"></p>
+</div>
+
+<div th:if="${result}">
+    <p><strong>Ответ:</strong> <span th:text="${result}"></span></p>
+</div>
+
+</body>
+</html>

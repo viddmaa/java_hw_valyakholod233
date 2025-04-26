@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @SpringBootApplication
 public class Laba3Application {
@@ -29,6 +29,7 @@ class AppConfig {
         China china = new China();
         china.setPopulation(1409670000);
         china.setCapital("Pekin");
+        china.setGovernmentForm("Socialist Republic");
         return china;
     }
 
@@ -38,6 +39,7 @@ class AppConfig {
         Russia russia = new Russia();
         russia.setPopulation(146199928);
         russia.setCapital("Moscow");
+        russia.setGovernmentForm("Federal Republic");
         return russia;
     }
 
@@ -46,6 +48,7 @@ class AppConfig {
         USA usa = new USA();
         usa.setPopulation(341814420);
         usa.setCapital("Washington");
+        usa.setGovernmentForm("Federal Republic");
         return usa;
     }
 }
@@ -53,18 +56,52 @@ class AppConfig {
 @Controller
 @RequestMapping("/countries")
 class CountryController {
-    private final List<Country> countries;
+    private final Country[] countries;
 
     @Autowired
     public CountryController(@Qualifier("china") Country china,
                              @Qualifier("russia") Country russia,
                              @Qualifier("usa") Country usa) {
-        this.countries = List.of(china, russia, usa);
+        this.countries = new Country[]{china, russia, usa};
     }
 
     @GetMapping
         public String showCountries(Model model) {
             model.addAttribute("countries", countries);
             return "countries";
+    }
+
+    @GetMapping("/calculate")
+    public String calculate(@RequestParam int a,
+                            @RequestParam int b,
+                            @RequestParam String op,
+                            Model model) {
+        int result = 0;
+        String error = null;
+
+        switch (op) {
+            case "+" -> result = a + b;
+            case "-" -> result = a - b;
+            case "*" -> result = a * b;
+            case "/" -> {
+                if (b != 0) {
+                    result = a / b;
+                } else {
+                    error = "Ошибка: Деление на ноль";
+                }
+            }
+            default -> {
+                if (error == null)
+                    error = "Ошибка: Недопустимая операция";
+            }
+        }
+
+        if (error != null) {
+            model.addAttribute("error", error);
+        } else {
+            model.addAttribute("result", result);
+        }
+
+        return "calculator";
     }
 }

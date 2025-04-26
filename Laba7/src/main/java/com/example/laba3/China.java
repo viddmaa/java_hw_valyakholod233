@@ -1,10 +1,11 @@
 package com.example.laba3;
 
-public class Russia implements Country {
+public class China implements Country {
     private long population;
     private String capital;
+    private String governmentForm;
 
-    public Russia() {
+    public China() {
     }
 
     @Override
@@ -19,7 +20,12 @@ public class Russia implements Country {
 
     @Override
     public String getName() {
-        return "Russia";
+        return "China";
+    }
+
+    @Override
+    public String getGovernmentForm() {
+        return governmentForm;
     }
 
     public void setPopulation(long population) {
@@ -28,5 +34,9 @@ public class Russia implements Country {
 
     public void setCapital(String capital) {
         this.capital = capital;
+    }
+
+    public void setGovernmentForm(String governmentForm) {
+        this.governmentForm = governmentForm;
     }
 }
