@@ -10,10 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class Laba3Application {
@@ -57,19 +56,21 @@ class AppConfig {
 @Controller
 @RequestMapping("/countries")
 class CountryController {
-    private final Country[] countries;
+    private final List<Country> countries = new ArrayList<>();
 
     @Autowired
     public CountryController(@Qualifier("china") Country china,
                              @Qualifier("russia") Country russia,
                              @Qualifier("usa") Country usa) {
-        this.countries = new Country[]{china, russia, usa};
+        countries.add(china);
+        countries.add(russia);
+        countries.add(usa);
     }
 
     @GetMapping
-        public String showCountries(Model model) {
-            model.addAttribute("countries", countries);
-            return "countries";
+    public String showCountries(Model model) {
+        model.addAttribute("countries", countries);
+        return "countries";
     }
 
     @GetMapping("/{name}")
@@ -83,37 +84,21 @@ class CountryController {
         return "country-not-found";
     }
 
-    @GetMapping("/calculate")
-    public String calculate(@RequestParam int a,
-                            @RequestParam int b,
-                            @RequestParam String op,
-                            Model model) {
-        int result = 0;
-        String error = null;
+    @GetMapping("/add")
+    public String showAddForm(Model model) {
+        model.addAttribute("countryForm", new CountryForm());
+        return "add-country";
+    }
 
-        switch (op) {
-            case "+" -> result = a + b;
-            case "-" -> result = a - b;
-            case "*" -> result = a * b;
-            case "/" -> {
-                if (b != 0) {
-                    result = a / b;
-                } else {
-                    error = "Ошибка: Деление на ноль";
-                }
-            }
-            default -> {
-                if (error == null)
-                    error = "Ошибка: Недопустимая операция";
-            }
-        }
-
-        if (error != null) {
-            model.addAttribute("error", error);
-        } else {
-            model.addAttribute("result", result);
-        }
-
-        return "calculator";
+    @PostMapping("/add")
+    public String addCountry(@ModelAttribute CountryForm countryForm) {
+        CustomCountry newCountry = new CustomCountry(
+                countryForm.getName(),
+                countryForm.getPopulation(),
+                countryForm.getCapital(),
+                countryForm.getGovernmentForm()
+        );
+        countries.add(newCountry);
+        return "redirect:/countries";
     }
 }

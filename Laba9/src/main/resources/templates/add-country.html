@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Добавить страну</title>
+</head>
+<body>
+
+<h1>Добавить новую страну</h1>
+
+<form th:action="@{/countries/add}" th:object="${countryForm}" method="post">
+  <label>Название страны:
+    <input type="text" th:field="*{name}" required />
+  </label><br><br>
+
+  <label>Население:
+    <input type="number" th:field="*{population}" required />
+  </label><br><br>
+
+  <label>Столица:
+    <input type="text" th:field="*{capital}" required />
+  </label><br><br>
+
+  <label>Форма правления:
+    <input type="text" th:field="*{governmentForm}" required />
+  </label><br><br>
+
+  <button type="submit">Добавить страну</button>
+</form>
+
+<br>
+<a href="/countries">← Назад к списку стран</a>
+
+</body>
+</html>
