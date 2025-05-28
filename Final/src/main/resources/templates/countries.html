@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список стран</title>
+</head>
+<body>
+
+<h1>Все страны</h1>
+
+<ul>
+    <li th:each="country : ${countries}">
+        <a th:href="@{'/countries/' + ${country.name}}" th:text="${country.name}"></a>
+    </li>
+</ul>
+
+</body>
+</html>
