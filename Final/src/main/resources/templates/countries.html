@@ -2,17 +2,49 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Список стран</title>
+    <title>Информация о странах</title>
 </head>
 <body>
 
-<h1>Все страны</h1>
+<h1>Информация о странах</h1>
 
+<!-- Список стран -->
 <ul>
     <li th:each="country : ${countries}">
-        <a th:href="@{'/countries/' + ${country.name}}" th:text="${country.name}"></a>
+        <a th:href="@{'/countries/' + ${country.name}}" th:text="${country.name}">Имя</a>
+        — Население: <span th:text="${country.population}"></span>
+        <form th:action="@{/countries/delete}" method="post" style="display:inline;">
+            <input type="hidden" name="name" th:value="${country.name}" />
+            <button type="submit">Удалить</button>
+        </form>
     </li>
 </ul>
+
+<hr/>
+
+<!-- Ошибка -->
+<p th:if="${error}" th:text="${error}" style="color: red;"></p>
+
+<h2>Добавить страну</h2>
+<form th:action="@{/countries/add}" method="post" th:object="${countryForm}">
+    <label>Название:
+        <input type="text" th:field="*{name}" required />
+    </label><br><br>
+
+    <label>Население:
+        <input type="number" th:field="*{population}" min="1" required />
+    </label><br><br>
+
+    <label>Столица:
+        <input type="text" th:field="*{capital}" required />
+    </label><br><br>
+
+    <label>Форма правления:
+        <input type="text" th:field="*{governmentForm}" required />
+    </label><br><br>
+
+    <button type="submit">Добавить страну</button>
+</form>
 
 </body>
 </html>

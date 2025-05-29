@@ -1,5 +1,6 @@
 package com.example.laba3;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 @SpringBootApplication
 public class Laba3Application {
@@ -70,7 +72,38 @@ class CountryController {
     @GetMapping
     public String showCountries(Model model) {
         model.addAttribute("countries", countries);
+        model.addAttribute("countryForm", new CountryForm());
         return "countries";
+    }
+
+    @PostMapping("/add")
+    public String addCountry(@ModelAttribute CountryForm countryForm, BindingResult result, Model model) {
+        if (countryForm.getPopulation() <= 0) {
+            model.addAttribute("error", "Население должно быть положительным числом!");
+            model.addAttribute("countries", countries);
+            return "countries";
+        }
+        CustomCountry newCountry = new CustomCountry(
+                countryForm.getName(),
+                countryForm.getPopulation(),
+                countryForm.getCapital(),
+                countryForm.getGovernmentForm()
+        );
+        countries.add(newCountry);
+        return "redirect:/countries";
+    }
+
+    @PostMapping("/delete")
+    public String deleteCountryFromForm(@RequestParam String name) {
+        Iterator<Country> iterator = countries.iterator();
+        while (iterator.hasNext()) {
+            Country country = iterator.next();
+            if (country.getName().equalsIgnoreCase(name)) {
+                iterator.remove();
+                break;
+            }
+        }
+        return "redirect:/countries";
     }
 
     @GetMapping("/{name}")
@@ -84,29 +117,14 @@ class CountryController {
         return "country-not-found";
     }
 
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
-        model.addAttribute("countryForm", new CountryForm());
-        return "add-country";
-    }
-
-    @PostMapping("/add")
-    public String addCountry(@ModelAttribute CountryForm countryForm) {
-        CustomCountry newCountry = new CustomCountry(
-                countryForm.getName(),
-                countryForm.getPopulation(),
-                countryForm.getCapital(),
-                countryForm.getGovernmentForm()
-        );
-        countries.add(newCountry);
-        return "redirect:/countries";
-    }
     @PatchMapping("/{name}")
     @ResponseBody
     public String updateCountry(@PathVariable String name, @RequestBody CountryForm updatedForm) {
         for (Country country : countries) {
             if (country instanceof CustomCountry && country.getName().equalsIgnoreCase(name)) {
-                ((CustomCountry) country).setPopulation(updatedForm.getPopulation());
+                if (updatedForm.getPopulation() > 0) {
+                    ((CustomCountry) country).setPopulation(updatedForm.getPopulation());
+                }
                 ((CustomCountry) country).setCapital(updatedForm.getCapital());
                 ((CustomCountry) country).setGovernmentForm(updatedForm.getGovernmentForm());
                 return "Updated successfully.";
@@ -136,6 +154,7 @@ class CountryController {
             }
         }
         model.addAttribute("countries", filtered);
+        model.addAttribute("countryForm", new CountryForm());
         return "countries";
     }
 }
